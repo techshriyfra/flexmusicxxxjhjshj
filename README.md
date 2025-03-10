@@ -13,6 +13,12 @@ Bot will send last 5 messages for each number in each request. So use number and
 + `/number` -> **Sends random virtual number**
 <br>
 
+```
+start - Starts the bot
+help - Shows help message
+number - Sends random virtual number
+```
+
 # ⚝ Installation
 1. **Clone repository**:
     ```bash
