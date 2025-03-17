@@ -10,7 +10,7 @@ import requests
 
 class VNEngine:
     """
-    Virtual Number Engine
+    Virtual Number Engine for https://temp-number.com/
     """
     def __init__(self) -> NoReturn:
         """
@@ -19,10 +19,10 @@ class VNEngine:
         Returns:
             None (typing.NoReturn)
         """
-        # Set the initial URLs and Endpoints
+        # Set the initial URLs and Endpoints for temp-number.com
         self.lang: str = "?lang=en"
-        self.base: str = "https://onlinesim.io/"
-        self.endpoint: str = "api/v1/free_numbers_content/"
+        self.base: str = "https://temp-number.com/"
+        self.endpoint: str = "api/v1/"
         self.country_url: str = f"{self.base}{self.endpoint}countries"
 
     def get_online_countries(self) -> List[Dict[str, str]]:
@@ -37,11 +37,11 @@ class VNEngine:
 
         # Process countries and filter them based on status
         if response["response"] == "1":
-            all_countries: List[Dict[str, str]] = response["counties"]
+            all_countries: List[Dict[str, str]] = response["countries"]
 
         # Filter numbers based on their online status
         online_countries: List[Dict[str, str]] = list(
-            filter(lambda x:x["online"] == True , all_countries)
+            filter(lambda x: x["online"] == True, all_countries)
         )
 
         # Return data
@@ -57,7 +57,6 @@ class VNEngine:
         Returns:
             numbers (list): List of available number for that country
         """
-
         # Set URL endpoint
         numbers_url: str = f"{self.country_url}/{country}{self.lang}"
 
@@ -67,7 +66,7 @@ class VNEngine:
         # Process numbers and extract number codes from data
         if response["response"] == "1":
             numbers: List[Dict[str, str]] = list(
-                map(lambda x:(x["data_humans"], x["full_number"]), response["numbers"])
+                map(lambda x: (x["data_humans"], x["full_number"]), response["numbers"])
             )
             # return data
             return numbers
@@ -85,7 +84,6 @@ class VNEngine:
         Returns:
             detail (list): List of messages in number's inbox 
         """
-
         # Set URL endpoint
         number_detail_url: str = f"{self.country_url}/{country}/{number}{self.lang}"
 
@@ -96,10 +94,9 @@ class VNEngine:
         if response["response"] == "1" and response["online"]:
             # Get inbox messages
             messages: List[Dict[str, str]] = list(
-                map(lambda x:{x["data_humans"]: x["text"]} , response["messages"]["data"])
+                map(lambda x: {x["data_humans"]: x["text"]}, response["messages"]["data"])
             )
             # Return data
             return messages
-
         else:
             return False
